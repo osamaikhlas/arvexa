@@ -1,0 +1,278 @@
+@import "tailwindcss";
+
+/* Arvexa design tokens — mirrors docs/brand-system.md and the published
+   design-system artifact (https://claude.ai/artifact/LTnA7vbxxGaehLxeSEX6xq).
+   Light theme first; dark redefines the same names twice (media query +
+   explicit [data-theme] override) so an explicit choice always wins. */
+
+:root {
+  /* Green duotone (2026-09-22 — see docs/decisions.md): "black" anchor is
+     user-supplied rgb(54,68,58) (dark theme's surface-100, unchanged).
+     "White" was originally a user-supplied medium-luminance sage
+     (rgb(124,144,130), ~0.26 relative luminance) which forced ink/ink-soft/
+     ink-faint/accent into a compressed near-black cluster to hold 4.5:1.
+     Later the same day, the user asked for that sage "white" to become a
+     true off-white instead (#F7F7F4, ~0.93 relative luminance) — this
+     restores the ~0.93 headroom real white gives, so the text hierarchy
+     below is back to normal, well-separated lightness steps rather than
+     the compressed cluster (all independently re-verified ≥4.5:1 against
+     this surface, with meaningfully more margin than the sage version
+     had). --surface-200/300 are subtle warm-neutral steps down from the
+     off-white for layering (cards, nav, inputs), not tinted sage. */
+  --surface-100: #f7f7f4;
+  --surface-200: #f0eee7;
+  --surface-300: #e8e5dc;
+  --ink: #101010;
+  --ink-soft: #4d4d4d;
+  --ink-faint: #5f5f5f;
+  --line: #d6d2c7;
+  /* "Accent" is a step distinct from --ink (not a brand color) — with the
+     off-white's ample headroom this can be a genuinely separate gray step
+     again rather than relying mostly on non-color affordances. */
+  --accent: #333333;
+  --accent-strong: #000000;
+  /* Light sage-tinted neutral (not the old solid sage) — soft badge/callout
+     fill; kept for a whisper of brand color while staying far above the
+     ~0.20 luminance floor --ink/--accent-strong text need for 4.5:1 here. */
+  --accent-soft: #e8ece3;
+  --good: #256b40;
+  /* Re-darkened from the sage-era value (#a8722a, only 3.83:1 against this
+     lighter off-white — would have failed WCAG AA) to #8a5a1f, verified
+     5.49:1. Not currently used as text anywhere in the app, but kept
+     compliant since it's a published design token. */
+  --warn: #8a5a1f;
+  --bad: #b3402d;
+
+  /* Fixed (non-theme-swapping) pair for "always dark" emphasis blocks —
+     e.g. the Evolve framework stage, the hero's "Production" box, the
+     "How We Use AI" section. These must NOT flip in dark mode, unlike
+     every other token above: they're deliberate visual emphasis, not
+     page-theme surfaces. Using surface-100/ink for that purpose was a
+     real bug caught in Checkpoint 7 browser testing — under system dark
+     mode it inverted to a near-white panel with invisible text. */
+  --surface-inverse: #36443a;
+  --ink-inverse: #ffffff;
+  /* A distinct light-gray step (not plain white) so accent-on-inverse
+     content still reads as "different from plain text" on the fixed-dark
+     surface — same job --accent does elsewhere, just tuned for AA contrast
+     against surface-inverse. Found failing live via axe-core (2026-09-26
+     production-readiness pass) at 4.09:1: the AiTransparency pills render
+     this same color as both the text AND a `bg-accent-inverse/10` tinted
+     fill, and that prior "~4.9:1" verification checked only against flat
+     --surface-inverse, not the actual ~10%-tinted pill background (which
+     is lighter than flat surface-inverse, since the tint itself is this
+     color blended in — self-referential, so darkening the token alone
+     doesn't simply help). Lightened to #c2c2c2 instead: 4.69:1 against the
+     real blended pill background (67,79,70), 5.77:1 against flat
+     surface-inverse for plain text/label usages — both re-verified. */
+  --accent-inverse: #c2c2c2;
+
+  /* Filled surfaces (primary button, active filter chip, signature badge)
+     that always carry readable "on-fill" text. Unlike the old brand-blue
+     version, black and white can't both host white text — so this tracks
+     --ink (near-black in light theme, white in dark theme), and --on-fill
+     tracks --surface-100 the same way, so filled UI auto-inverts with the
+     theme instead of needing a fixed hardcoded hue. NOTE: a var() custom
+     property resolves at its OWN declaring element, then inherits the
+     already-resolved value — it does not re-resolve inside a descendant
+     that later overrides --ink. Any non-root theme scope (e.g. the
+     `[data-theme="light"]` block below) MUST redeclare these three too,
+     or it silently inherits :root's resolved value instead of its own. */
+  --accent-fill: var(--ink);
+  --accent-fill-strong: var(--ink-soft);
+  --on-fill: var(--surface-100);
+
+  /* Applied to the logo mark image so the single black-glyph source asset
+     reads correctly on both a light Nav/Footer (light theme) and a black
+     one (dark theme) without needing separate light/dark PNG exports. */
+  --logo-filter: none;
+
+  --radius-none: 0px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+}
+
+/* Green duotone dark theme (2026-09-22 — see docs/decisions.md, and the
+   :root comment above for the contrast-headroom tradeoff). "Black" →
+   rgb(54,68,58), user-supplied. --ink-soft/faint all independently
+   re-verified ≥4.5:1 against this background. --accent-fill/
+   --accent-fill-strong/--on-fill are deliberately NOT redefined here —
+   these rules target the same :root element as their var(--ink)/
+   var(--surface-100) declaration, so same-element cascade resolution
+   already picks up this block's --ink/--surface-100 correctly (unlike a
+   non-root scope — see the `[data-theme="light"]` block's comment below
+   for why that case differs and needs its own redeclaration).
+   --accent found failing live via axe-core (2026-09-26 production-readiness
+   pass): the original #b3b3b3 was only checked against --surface-100
+   (5.18:1) but SectionEyebrow renders it on `tone="raised"` sections too,
+   which use the lighter --surface-200 (#3c4b40) — only 4.4:1 there, below
+   AA. Lightened to #b8b8b8 (5.18:1 vs surface-100, 4.66:1 vs surface-200,
+   both re-verified). --ink-faint had the same class of bug, caught the
+   same pass after the About-page section-rhythm fix (same day) moved a
+   `text-ink-faint` label onto a `tone="raised"` section for the first
+   time — #b0b0b0 was only 4.26:1 against --surface-200. Lightened to
+   #bdbdbd (4.92:1 vs surface-200, re-verified), still darker than
+   --ink-soft so the soft/faint lightness order is preserved. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-100: #36443a;
+    --surface-200: #3c4b40;
+    --surface-300: #2e3a32;
+    --ink: #ffffff;
+    --ink-soft: #c2c2c2;
+    --ink-faint: #bdbdbd;
+    --line: #4a5d4f;
+    --accent: #b8b8b8;
+    --accent-strong: #ffffff;
+    --accent-soft: #2a362e;
+    --good: #5fbe85;
+    --warn: #d3a34c;
+    --bad: #e0836b;
+    --logo-filter: invert(1);
+  }
+}
+
+:root[data-theme="dark"] {
+  --surface-100: #36443a;
+  --surface-200: #3c4b40;
+  --surface-300: #2e3a32;
+  --ink: #ffffff;
+  --ink-soft: #c2c2c2;
+  --ink-faint: #bdbdbd;
+  --line: #4a5d4f;
+  --accent: #b8b8b8;
+  --accent-strong: #ffffff;
+  --accent-soft: #2a362e;
+  --good: #5fbe85;
+  --warn: #d3a34c;
+  --bad: #e0836b;
+  --logo-filter: invert(1);
+}
+
+/* Non-root theme scope — lets a subtree opt into the light palette while
+   the rest of the (dark-forced) page isn't. Used by the homepage hero
+   panel only (see docs/decisions.md); `:root[data-theme="light"]` above
+   only ever matches the <html> element itself, so it can't cover this. */
+[data-theme="light"] {
+  --surface-100: #f7f7f4;
+  --surface-200: #f0eee7;
+  --surface-300: #e8e5dc;
+  --ink: #101010;
+  --ink-soft: #4d4d4d;
+  --ink-faint: #5f5f5f;
+  --line: #d6d2c7;
+  --accent: #333333;
+  --accent-strong: #000000;
+  --accent-soft: #e8ece3;
+  --logo-filter: none;
+  /* --accent-fill/-strong/--on-fill are declared in :root as var(--ink)-style
+     references specifically so they auto-invert with the theme (see :root's
+     comment) — but that only works for the element where they're declared.
+     Custom properties resolve var() at their OWN declaring element, then
+     inherit the already-resolved value; a subtree that overrides --ink
+     without also redeclaring --accent-fill here would silently inherit
+     :root's (dark-theme) resolved white, not re-resolve against this
+     scope's black --ink. Caught via a live browser check — the homepage's
+     light-scoped "Start a Project" button rendered with no visible fill. */
+  --accent-fill: var(--ink);
+  --accent-fill-strong: var(--ink-soft);
+  --on-fill: var(--surface-100);
+}
+
+@theme inline {
+  --color-surface-100: var(--surface-100);
+  --color-surface-200: var(--surface-200);
+  --color-surface-300: var(--surface-300);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-fill: var(--accent-fill);
+  --color-accent-fill-strong: var(--accent-fill-strong);
+  --color-on-fill: var(--on-fill);
+  --color-good: var(--good);
+  --color-warn: var(--warn);
+  --color-bad: var(--bad);
+  --color-surface-inverse: var(--surface-inverse);
+  --color-ink-inverse: var(--ink-inverse);
+  --color-accent-inverse: var(--accent-inverse);
+
+  --radius-none: var(--radius-none);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-6: var(--space-6);
+  --spacing-8: var(--space-8);
+  --spacing-12: var(--space-12);
+  --spacing-16: var(--space-16);
+  --spacing-24: var(--space-24);
+
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+body {
+  background: var(--surface-100);
+  color: var(--ink);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
+
+/* Floating decorative 3D shapes (2026-09-26, "full 3D" pass — see
+   docs/decisions.md). Purely CSS: a slow drift + rotation loop on a blurred,
+   low-opacity ring/square. Decorative only — aria-hidden, positioned behind
+   content (z-index), never used on real evidence like screenshots (those
+   get the real mouse-tracked useTilt instead). Respects
+   prefers-reduced-motion via the existing rule below, same as every other
+   animation on the site. */
+@keyframes float-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate3d(1, 1, 0, 0deg); }
+  50% { transform: translate3d(14px, -22px, 0) rotate3d(1, 1, 0, 180deg); }
+}
+@keyframes float-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate3d(1, 1, 1, 0deg); }
+  50% { transform: translate3d(-18px, 18px, 0) rotate3d(1, 1, 1, -160deg); }
+}
+.floating-shape-a {
+  animation: float-drift-a 14s ease-in-out infinite;
+}
+.floating-shape-b {
+  animation: float-drift-b 18s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
