@@ -11,9 +11,16 @@ import type { Metadata } from "next";
  * and a clearly-fake placeholder otherwise — never a guessed real-looking
  * domain. Set NEXT_PUBLIC_SITE_URL to the real domain before launch
  * (tracked in docs/launch-checklist.md once that exists).
+ *
+ * Uses `||`, not `??`, deliberately: a real Vercel deployment crashed the
+ * build with `new URL("")` because the project had `NEXT_PUBLIC_SITE_URL`
+ * set to an empty string (auto-scaffolded from .env.example, never given a
+ * real value) rather than left unset — `??` only falls through on
+ * null/undefined, not "". An empty string is never a meaningful URL, so
+ * treating it the same as unset here is correct, not just defensive.
  */
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ??
+  process.env.NEXT_PUBLIC_SITE_URL ||
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://arvexa.example");
 
 export const SITE_NAME = "Arvexa";
