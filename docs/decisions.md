@@ -656,3 +656,12 @@ One entry per significant decision. Read this before re-litigating something alr
 **Screenshots**: 4 real screenshots taken live (not stock/placeholder) and saved to `public/case-studies/sybrisco/`: the Arabic hero (default landing state), the Arabic and English services grids side by side (the clearest single proof of the translation feature), and the English contact section.
 **Verified**: `npx tsc --noEmit`, `npx eslint src/`, and `npm run build` all clean; axe-core on `/work/sybrisco` — 0 violations; confirmed it renders correctly under the "AI Web Development" filter on `/work` (category chosen to match the site's other non-AI-product marketing sites — Manza, Shakeel Pakwan, Adz Lab, Cool n Bite — all of which also carry `aiContribution: null`).
 **Impact**: `src/data/projects.ts` (new `Project` entry), `public/case-studies/sybrisco/*.jpg` (4 new screenshots), `docs/project-status.md` (project count 8 → 9).
+
+---
+
+**Decision**: Renamed "AI Content Publisher" to "AI Publisher" (display name only) and reordered `PROJECTS` so Sybrisco and Adz Lab sit at positions 3 and 4.
+**Date**: 2026-09-27
+**Reason**: User: "change ai content publisher to ai publisher also bring sybrisco on top 3", then mid-turn: "adzlab on 4."
+**What was built**: Only the `title` field (`src/data/projects.ts`) and its one cross-link label (`services/[slug]/page.tsx`'s AI Rescue "Where we've done this" card) changed — `slug` stays `ai-content-publisher`, so the live URL, image paths, and every internal reference are untouched; older doc references to the old name (`docs/project-inventory-raw.md` etc.) were left as-is since those are dated historical records, not live copy. Reordered the `PROJECTS` array (not the `featured` flags, which are unrelated to array order) so the sequence is now RAG-Based AI Chatbot, AI Publisher, Sybrisco, Adz Lab, SMGSC Portal, Manza, Shakeel Pakwan, Cool n Bite, OPD Reimbursement Workflow — this reorder affects both the `/work` "All" tab's default order and each project's position within its own category filter (Sybrisco now leads "AI Web Development" instead of trailing it).
+**Verified**: typecheck, lint, and build clean; live-checked `/work` (correct 1–9 order, confirmed Adz Lab renders 4th), `/services/ai-rescue` (cross-link now reads "AI Publisher" and still routes to `/work/ai-content-publisher`); axe-core 0 violations on `/work`.
+**Impact**: `src/data/projects.ts`, `src/app/services/[slug]/page.tsx`.

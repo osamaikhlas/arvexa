@@ -126,7 +126,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-5">
             <TiltCard>
               <Card className="p-6">
-                <div className="text-[15px] font-semibold text-ink">AI Content Publisher</div>
+                <div className="text-[15px] font-semibold text-ink">AI Publisher</div>
                 <Text size="sm" className="mt-2">
                   A retired AI model ID, a silently-failing token ledger, and a race-condition autosave
                   bug, found, root-caused, and fixed in a real shipped product.

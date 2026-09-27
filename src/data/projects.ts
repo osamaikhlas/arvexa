@@ -63,7 +63,7 @@ export const PROJECTS: Project[] = [
     permissionLevel: "anonymized",
   },
   {
-    title: "AI Content Publisher",
+    title: "AI Publisher",
     slug: "ai-content-publisher",
     category: "AI Saas Implementation",
     summary:
@@ -122,6 +122,84 @@ export const PROJECTS: Project[] = [
     testimonial: null,
     liveUrl: "https://ai-content-publisher-six.vercel.app",
     featured: true,
+    permissionLevel: "public",
+  },
+  {
+    title: "Sybrisco",
+    slug: "sybrisco",
+    category: "AI Web Development",
+    summary:
+      "A fully bilingual (Arabic/English) corporate site for a Saudi IT and digital-transformation consultancy, built to read as a credible enterprise partner for Vision 2030 work, with a real Arabic-first experience rather than a translated afterthought.",
+    client: "SYBRISCO KSA",
+    content: {
+      problem:
+        "SYBRISCO sells enterprise IT, cybersecurity, cloud, and digital-transformation services into the Saudi market, where credibility depends on reading as a genuine Arabic-language, Vision 2030–aligned partner, not an English site with a translate button bolted on. The site had to carry real trust signals (certifications, compliance posture, named leadership) and convert a visitor straight into a qualified consultation request.",
+      startingPoint: "Built from scratch as a bilingual corporate site; no earlier version is visible from the deployed product.",
+      solution:
+        "A single-page site, hero, stats, about (vision/mission/goal), seven services, a \"why us\" trust section, a four-step engagement approach, nine target sectors, and a contact section with a real working form, that loads in Arabic by default and switches to English (or back) instantly via a nav toggle. The switch isn't a text swap: it flips the entire layout direction, right-to-left for Arabic and left-to-right for English, mirroring the nav, logo lockup, stat blocks, and every section's alignment, and swaps typefaces per script (IBM Plex Sans Arabic for Arabic copy, Sora/Manrope for Latin) rather than rendering Arabic in a Latin font pretending to support it.",
+      architecture: [
+        "React (Vite) single-page app, static-deployed on Vercel",
+        "i18n layer driving both copy and document text-direction (RTL ↔ LTR)",
+        "Per-script web fonts: IBM Plex Sans Arabic (AR), Sora / Manrope (EN)",
+        "Animated stat counters (founded year, service-area count, quality/vision figures)",
+        "Client-side contact form (name, email, company, message)",
+      ],
+      engineeringContribution:
+        "The real engineering is in the localization, not just the copy. Switching languages re-renders the whole document direction, so RTL Arabic and LTR English aren't two skins on the same fixed layout: nav order, the logo lockup, icon placement, and every card and stat block mirror correctly rather than just having their text replaced in place. Loading a matched Arabic web font (IBM Plex Sans Arabic) instead of leaning on the Latin body font's fallback glyphs is a deliberate, easy-to-skip detail that this site gets right. Content is organized into clearly scoped sections (About, Services, Why Us, Approach, Sectors, Contact) that hold up in both directions and at both text lengths, since Arabic and English strings for the same sentence are rarely the same width.",
+      aiContribution: null,
+      results:
+        "A complete bilingual corporate site, hero, stats, about, seven services, a trust/credentials section, a four-step approach, nine target sectors, and a working contact form, with full RTL/LTR mirroring verified live in both directions, not just spot-checked copy.",
+    },
+    technology: ["React", "Vite", "Google Fonts (IBM Plex Sans Arabic, Sora, Manrope)", "Vercel"],
+    images: [
+      "/case-studies/sybrisco/home-arabic.jpg",
+      "/case-studies/sybrisco/services-arabic.jpg",
+      "/case-studies/sybrisco/services-english.jpg",
+      "/case-studies/sybrisco/contact-english.jpg",
+    ],
+    videos: [],
+    testimonial: null,
+    liveUrl: "https://sybrisco.vercel.app",
+    featured: false,
+    permissionLevel: "public",
+  },
+  {
+    title: "Adz Lab",
+    slug: "adz-lab",
+    category: "AI Web Development",
+    summary:
+      "A marketing site and lead funnel for a performance-creative agency serving ecommerce brands across the UK, USA, and UAE, built to sell the studio as hard as the ads it makes for clients.",
+    client: "Adz Lab",
+    content: {
+      problem:
+        "Adz Lab makes performance creative: video ads, UGC, and AI motion work for ecommerce and DTC brands. Their own site had to prove that in seconds rather than act as a static gallery. Every page needed to end at one conversion (a booked discovery call), carry dozens of ad reels without a slow first paint, and make its own revenue and creative-output numbers feel verified rather than printed.",
+      startingPoint: "A five-page marketing site built from scratch, with no existing site or CMS to build on.",
+      solution:
+        "The entire site, five routes, every section, and the contact form, lives in a single App.tsx, with a lightweight custom router built on history.pushState and popstate handling navigation and hash-scrolling in under 30 lines, instead of a router library or page-per-file scaffolding. Every ad reel sits behind an IntersectionObserver with a 400px lookahead margin. Videos mount only once they're about to enter view, play on hover, and reset on mouse-leave, so the homepage carries twenty-plus reels without twenty-plus video requests firing on load. The contact form validates name, work email, phone, and website against real patterns as each field blurs, not just on submit, and normalizes a bare domain like brand.com into a proper URL before it hits Formspree.",
+      architecture: [
+        "Single App.tsx: 5 routes, custom pushState/popstate router",
+        "IntersectionObserver-gated video loading (400px lookahead)",
+        "Count-up stat animation via requestAnimationFrame, 1.6s ease",
+        "Formspree-validated contact form, no backend",
+        "Hand-rolled CSS design system (Tailwind installed, deliberately unused)",
+      ],
+      engineeringContribution:
+        "Revenue and creative-output stats animate from zero the moment they scroll into view, eased over 1.6 seconds with requestAnimationFrame, a small piece of motion doing a credibility job so the number feels calculated live rather than typed into a template. Two dependencies were deliberately left unused despite being installed. Tailwind sat unused because the design's specific negative letter-spacing, oversized display type, and bespoke card geometry were more directly controlled with a plain, well-organized stylesheet than utility classes would allow, and a router library went unused because five routes and a couple of hash-linked anchors don't need one.",
+      aiContribution: null,
+      results:
+        "Adz Lab's own reported business figures, $200,000 in revenue generated from their clients since 2024, $1,613,608.18 in revenue impact attributed to their ad creative, and 3,000+ creatives produced since 2024, are what the homepage counts up to on load. These are the agency's business numbers, not an Arvexa engineering-effort metric.",
+    },
+    technology: ["React 18", "TypeScript", "Vite", "Formspree", "Vercel"],
+    images: [
+      "/case-studies/adz-lab/home.jpg",
+      "/case-studies/adz-lab/services.jpg",
+      "/case-studies/adz-lab/work.jpg",
+      "/case-studies/adz-lab/contact.jpg",
+    ],
+    videos: [],
+    testimonial: null,
+    liveUrl: "https://adzlab.co",
+    featured: false,
     permissionLevel: "public",
   },
   {
@@ -254,45 +332,6 @@ export const PROJECTS: Project[] = [
     permissionLevel: "public",
   },
   {
-    title: "Adz Lab",
-    slug: "adz-lab",
-    category: "AI Web Development",
-    summary:
-      "A marketing site and lead funnel for a performance-creative agency serving ecommerce brands across the UK, USA, and UAE, built to sell the studio as hard as the ads it makes for clients.",
-    client: "Adz Lab",
-    content: {
-      problem:
-        "Adz Lab makes performance creative: video ads, UGC, and AI motion work for ecommerce and DTC brands. Their own site had to prove that in seconds rather than act as a static gallery. Every page needed to end at one conversion (a booked discovery call), carry dozens of ad reels without a slow first paint, and make its own revenue and creative-output numbers feel verified rather than printed.",
-      startingPoint: "A five-page marketing site built from scratch, with no existing site or CMS to build on.",
-      solution:
-        "The entire site, five routes, every section, and the contact form, lives in a single App.tsx, with a lightweight custom router built on history.pushState and popstate handling navigation and hash-scrolling in under 30 lines, instead of a router library or page-per-file scaffolding. Every ad reel sits behind an IntersectionObserver with a 400px lookahead margin. Videos mount only once they're about to enter view, play on hover, and reset on mouse-leave, so the homepage carries twenty-plus reels without twenty-plus video requests firing on load. The contact form validates name, work email, phone, and website against real patterns as each field blurs, not just on submit, and normalizes a bare domain like brand.com into a proper URL before it hits Formspree.",
-      architecture: [
-        "Single App.tsx: 5 routes, custom pushState/popstate router",
-        "IntersectionObserver-gated video loading (400px lookahead)",
-        "Count-up stat animation via requestAnimationFrame, 1.6s ease",
-        "Formspree-validated contact form, no backend",
-        "Hand-rolled CSS design system (Tailwind installed, deliberately unused)",
-      ],
-      engineeringContribution:
-        "Revenue and creative-output stats animate from zero the moment they scroll into view, eased over 1.6 seconds with requestAnimationFrame, a small piece of motion doing a credibility job so the number feels calculated live rather than typed into a template. Two dependencies were deliberately left unused despite being installed. Tailwind sat unused because the design's specific negative letter-spacing, oversized display type, and bespoke card geometry were more directly controlled with a plain, well-organized stylesheet than utility classes would allow, and a router library went unused because five routes and a couple of hash-linked anchors don't need one.",
-      aiContribution: null,
-      results:
-        "Adz Lab's own reported business figures, $200,000 in revenue generated from their clients since 2024, $1,613,608.18 in revenue impact attributed to their ad creative, and 3,000+ creatives produced since 2024, are what the homepage counts up to on load. These are the agency's business numbers, not an Arvexa engineering-effort metric.",
-    },
-    technology: ["React 18", "TypeScript", "Vite", "Formspree", "Vercel"],
-    images: [
-      "/case-studies/adz-lab/home.jpg",
-      "/case-studies/adz-lab/services.jpg",
-      "/case-studies/adz-lab/work.jpg",
-      "/case-studies/adz-lab/contact.jpg",
-    ],
-    videos: [],
-    testimonial: null,
-    liveUrl: "https://adzlab.co",
-    featured: false,
-    permissionLevel: "public",
-  },
-  {
     title: "Cool n Bite",
     slug: "cool-n-bite",
     category: "AI Web Development",
@@ -327,45 +366,6 @@ export const PROJECTS: Project[] = [
     videos: [],
     testimonial: null,
     liveUrl: "https://coolnbite.vercel.app",
-    featured: false,
-    permissionLevel: "public",
-  },
-  {
-    title: "Sybrisco",
-    slug: "sybrisco",
-    category: "AI Web Development",
-    summary:
-      "A fully bilingual (Arabic/English) corporate site for a Saudi IT and digital-transformation consultancy, built to read as a credible enterprise partner for Vision 2030 work, with a real Arabic-first experience rather than a translated afterthought.",
-    client: "SYBRISCO KSA",
-    content: {
-      problem:
-        "SYBRISCO sells enterprise IT, cybersecurity, cloud, and digital-transformation services into the Saudi market, where credibility depends on reading as a genuine Arabic-language, Vision 2030–aligned partner, not an English site with a translate button bolted on. The site had to carry real trust signals (certifications, compliance posture, named leadership) and convert a visitor straight into a qualified consultation request.",
-      startingPoint: "Built from scratch as a bilingual corporate site; no earlier version is visible from the deployed product.",
-      solution:
-        "A single-page site, hero, stats, about (vision/mission/goal), seven services, a \"why us\" trust section, a four-step engagement approach, nine target sectors, and a contact section with a real working form, that loads in Arabic by default and switches to English (or back) instantly via a nav toggle. The switch isn't a text swap: it flips the entire layout direction, right-to-left for Arabic and left-to-right for English, mirroring the nav, logo lockup, stat blocks, and every section's alignment, and swaps typefaces per script (IBM Plex Sans Arabic for Arabic copy, Sora/Manrope for Latin) rather than rendering Arabic in a Latin font pretending to support it.",
-      architecture: [
-        "React (Vite) single-page app, static-deployed on Vercel",
-        "i18n layer driving both copy and document text-direction (RTL ↔ LTR)",
-        "Per-script web fonts: IBM Plex Sans Arabic (AR), Sora / Manrope (EN)",
-        "Animated stat counters (founded year, service-area count, quality/vision figures)",
-        "Client-side contact form (name, email, company, message)",
-      ],
-      engineeringContribution:
-        "The real engineering is in the localization, not just the copy. Switching languages re-renders the whole document direction, so RTL Arabic and LTR English aren't two skins on the same fixed layout: nav order, the logo lockup, icon placement, and every card and stat block mirror correctly rather than just having their text replaced in place. Loading a matched Arabic web font (IBM Plex Sans Arabic) instead of leaning on the Latin body font's fallback glyphs is a deliberate, easy-to-skip detail that this site gets right. Content is organized into clearly scoped sections (About, Services, Why Us, Approach, Sectors, Contact) that hold up in both directions and at both text lengths, since Arabic and English strings for the same sentence are rarely the same width.",
-      aiContribution: null,
-      results:
-        "A complete bilingual corporate site, hero, stats, about, seven services, a trust/credentials section, a four-step approach, nine target sectors, and a working contact form, with full RTL/LTR mirroring verified live in both directions, not just spot-checked copy.",
-    },
-    technology: ["React", "Vite", "Google Fonts (IBM Plex Sans Arabic, Sora, Manrope)", "Vercel"],
-    images: [
-      "/case-studies/sybrisco/home-arabic.jpg",
-      "/case-studies/sybrisco/services-arabic.jpg",
-      "/case-studies/sybrisco/services-english.jpg",
-      "/case-studies/sybrisco/contact-english.jpg",
-    ],
-    videos: [],
-    testimonial: null,
-    liveUrl: "https://sybrisco.vercel.app",
     featured: false,
     permissionLevel: "public",
   },
