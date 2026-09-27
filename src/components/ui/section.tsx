@@ -3,15 +3,21 @@ import { cn } from "@/lib/utils";
 import { Container } from "./container";
 
 export interface SectionProps extends React.HTMLAttributes<HTMLElement> {
-  /** Surface tone — "raised" alternates panel background per the homepage rhythm (see docs/homepage-design.md). */
+  /** Surface tone. "raised" alternates panel background per the homepage
+   * rhythm (docs/homepage-design.md) — bg-base vs. bg-surface, both light.
+   * "inverse" is the site's reserved-dark treatment (bg-dark) — restricted
+   * to exactly two sections site-wide (the homepage's closing CTA, and
+   * wherever a page mirrors it) since 2026-09-27's sand/rust refactor; see
+   * docs/decisions.md. Every child of an "inverse" section must set its own
+   * inverse-tier text/border color explicitly (ink-inverse, line-inverse,
+   * …) since the site no longer theme-swaps automatically. */
   tone?: "default" | "raised" | "inverse";
   bordered?: boolean;
-  /** Scopes this section (and everything inside it) to the light theme via
-   * `[data-theme="light"]` (globals.css) while the rest of the dark-forced
-   * site is unaffected — how the homepage's alternating black/white section
-   * rhythm is built (docs/decisions.md, 2026-09-21). Forces a plain white
-   * background; `tone`'s background is ignored when this is set (its
-   * dark-theme-tuned raised/inverse shades don't apply to a light panel). */
+  /** Forces the plain bg-base background regardless of `tone` — used to
+   * break up two adjacent "raised" sections, or override a "raised"
+   * default. A holdover name from the old dark/light theme-pair system
+   * (docs/decisions.md, 2026-09-21); "light" is the only value because the
+   * whole site is light-first now, so there's nothing to opt out of. */
   theme?: "light";
 }
 
@@ -21,7 +27,6 @@ export interface SectionProps extends React.HTMLAttributes<HTMLElement> {
 function Section({ className, tone = "default", bordered = false, theme, children, ...props }: SectionProps) {
   return (
     <section
-      data-theme={theme}
       className={cn(
         "py-12 md:py-24",
         theme === "light" ? "bg-surface-100" : tone === "raised" && "bg-surface-200",

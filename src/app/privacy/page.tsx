@@ -22,7 +22,7 @@ export const metadata = pageMetadata({
  */
 export default function PrivacyPage() {
   return (
-    <div data-theme="light" className="bg-surface-100">
+    <div className="bg-surface-100">
     <Container className="pt-16 pb-24 md:pt-24 max-w-[760px]">
       <SectionEyebrow>Legal</SectionEyebrow>
       <Heading level="lg" as="h1" className="mt-3.5">

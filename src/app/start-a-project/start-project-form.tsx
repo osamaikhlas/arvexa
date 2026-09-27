@@ -31,7 +31,7 @@ function StartProjectForm() {
         <Heading level="md" as="h2">
           Thanks, we&apos;ve got it.
         </Heading>
-        <Text className="mt-3 max-w-[52ch] mx-auto">
+        <Text className="mt-3 max-w-[52ch] mx-auto text-ink">
           We read every submission ourselves. Expect a reply within a couple of business days to set
           up a discovery call.
         </Text>

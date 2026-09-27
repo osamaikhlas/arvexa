@@ -45,7 +45,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
   const { content } = project;
 
   return (
-    <div data-theme="light" className="bg-surface-100">
+    <div className="bg-surface-100">
       {/* HERO */}
       <Container className="pt-16 pb-12 md:pt-24 md:pb-16">
         <Link href="/work" className="text-[13.5px] text-ink-soft hover:text-accent">

@@ -20,19 +20,17 @@ function DiagramStage({ index, label, description, emphasis, className, ...props
     <div
       className={cn(
         "rounded-md border p-4",
-        emphasis ? "bg-surface-inverse border-surface-inverse" : "bg-surface-200 border-line",
+        emphasis ? "bg-accent-soft border-accent" : "bg-surface-200 border-line",
         className,
       )}
       {...props}
     >
       {index && (
-        <div className={cn("font-mono text-xs", emphasis ? "text-accent-inverse" : "text-accent")}>{index}</div>
+        <div className={cn("font-mono text-xs", emphasis ? "text-accent-strong" : "text-ink-faint")}>{index}</div>
       )}
-      <div className={cn("mt-2 text-sm font-semibold", emphasis ? "text-ink-inverse" : "text-ink")}>{label}</div>
+      <div className="mt-2 text-sm font-semibold text-ink">{label}</div>
       {description && (
-        <div className={cn("mt-1.5 text-xs", emphasis ? "text-ink-inverse/70" : "text-ink-soft")}>
-          {description}
-        </div>
+        <div className={cn("mt-1.5 text-xs", emphasis ? "text-ink" : "text-ink-soft")}>{description}</div>
       )}
     </div>
   );

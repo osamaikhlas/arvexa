@@ -41,7 +41,7 @@ function Nav() {
 
         <nav className="hidden md:flex items-center gap-9">
           {NAV_LINKS.map((l) => (
-            <Link key={l.href} href={l.href} className="text-[14px] text-ink hover:text-accent">
+            <Link key={l.href} href={l.href} className="text-[14px] text-ink-faint hover:text-accent">
               {l.label}
             </Link>
           ))}
@@ -74,7 +74,7 @@ function Nav() {
             <Link
               key={l.href}
               href={l.href}
-              className="py-3 text-[15px] text-ink"
+              className="py-3 text-[15px] text-ink-faint"
               onClick={() => setOpen(false)}
             >
               {l.label}

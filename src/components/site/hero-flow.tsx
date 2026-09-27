@@ -95,7 +95,7 @@ function HeroFlow() {
           initial={reduced ? undefined : "hidden"}
           animate="visible"
           variants={blockVariants}
-          className={cn("rounded-md bg-surface-inverse px-4 py-3 text-sm text-ink-inverse")}
+          className={cn("rounded-md bg-accent px-4 py-3 text-sm text-on-fill")}
         >
           Production
         </motion.div>

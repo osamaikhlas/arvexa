@@ -42,7 +42,7 @@ function ServiceCard({ title, description, icon, signature }: ServiceCardProps) 
           <div
             className={cn(
               "flex h-10 w-10 items-center justify-center rounded-sm",
-              signature ? "bg-accent-fill text-on-fill" : "bg-accent-soft text-accent",
+              signature ? "bg-accent-fill text-on-fill" : "bg-accent-soft text-accent-strong",
             )}
           >
             {icon}

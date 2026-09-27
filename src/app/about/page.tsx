@@ -56,7 +56,7 @@ export default function AboutPage() {
         </Text>
       </Section>
 
-      <Section tone="inverse">
+      <Section tone="raised">
         <AiTransparency />
       </Section>
 

@@ -41,7 +41,7 @@ function ProcessStageContent({ stage, icon }: ProcessStageContentProps) {
             style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
             whileHover={{ scale: 1.08 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="flex h-12 w-12 items-center justify-center rounded-md bg-accent-soft text-accent shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
+            className="flex h-12 w-12 items-center justify-center rounded-md bg-accent-soft text-accent-strong shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
           >
             {icon}
           </motion.div>

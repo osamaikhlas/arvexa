@@ -47,10 +47,8 @@ export default function Home() {
           faded/masked — see docs/decisions.md, 2026-09-21). Just the
           headline + CTAs; the eyebrow/subtext moved to the PROBLEM section
           below since they were competing with the animation for attention
-          more than they were adding to the hero itself. `data-theme="light"`
-          scopes this one panel to the light palette (globals.css) while the
-          rest of the site stays on its forced dark theme. */}
-      <section data-theme="light" className="relative overflow-hidden bg-surface-100">
+          more than they were adding to the hero itself. */}
+      <section className="relative overflow-hidden bg-surface-100">
         <WovenCanvas />
         <Container className="relative z-10 py-24 md:py-36 flex flex-col items-center text-center">
           <Heading level="xl" as="h1" className="max-w-[760px]">
@@ -158,7 +156,7 @@ export default function Home() {
       </Section>
 
       {/* HOW WE USE AI */}
-      <Section tone="inverse">
+      <Section tone="raised">
         <AiTransparency />
       </Section>
 
@@ -176,17 +174,31 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* FINAL CTA */}
-      <Section className="text-center">
+      {/* FINAL CTA — the one non-footer section reserved for the dark
+          treatment (2026-09-27 sand/rust refactor — see docs/decisions.md).
+          `tone="inverse"` gives it bg-surface-inverse (--bg-dark); every
+          child below explicitly overrides its color for that surface,
+          since the site's default tokens are tuned for a light bg now. */}
+      <Section tone="inverse" className="text-center">
         <Container className="max-w-[680px]">
-          <Heading level="lg" as="h2">
+          <Heading level="lg" as="h2" className="text-ink-inverse">
             Have an AI product that isn&apos;t ready for production?
           </Heading>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-            <CtaButton id="home-final-start-project" href="/start-a-project" variant="primary">
+            <CtaButton
+              id="home-final-start-project"
+              href="/start-a-project"
+              variant="primary"
+              className="bg-ink-inverse text-surface-inverse hover:bg-accent-soft"
+            >
               Start a Project →
             </CtaButton>
-            <CtaButton id="home-final-audit" href="/services/ai-rescue" variant="secondary">
+            <CtaButton
+              id="home-final-audit"
+              href="/services/ai-rescue"
+              variant="secondary"
+              className="text-ink-inverse border-line-inverse hover:border-accent-soft hover:text-accent-soft"
+            >
               Request a Production Readiness Audit
             </CtaButton>
           </div>
