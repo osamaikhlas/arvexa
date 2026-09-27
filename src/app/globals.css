@@ -6,42 +6,45 @@
    explicit [data-theme] override) so an explicit choice always wins. */
 
 :root {
-  /* Green duotone (2026-09-22 — see docs/decisions.md): "black" anchor is
-     user-supplied rgb(54,68,58) (dark theme's surface-100, unchanged).
-     "White" was originally a user-supplied medium-luminance sage
-     (rgb(124,144,130), ~0.26 relative luminance) which forced ink/ink-soft/
-     ink-faint/accent into a compressed near-black cluster to hold 4.5:1.
-     Later the same day, the user asked for that sage "white" to become a
-     true off-white instead (#F7F7F4, ~0.93 relative luminance) — this
-     restores the ~0.93 headroom real white gives, so the text hierarchy
-     below is back to normal, well-separated lightness steps rather than
-     the compressed cluster (all independently re-verified ≥4.5:1 against
-     this surface, with meaningfully more margin than the sage version
-     had). --surface-200/300 are subtle warm-neutral steps down from the
-     off-white for layering (cards, nav, inputs), not tinted sage. */
-  --surface-100: #f7f7f4;
-  --surface-200: #f0eee7;
-  --surface-300: #e8e5dc;
-  --ink: #101010;
-  --ink-soft: #4d4d4d;
-  --ink-faint: #5f5f5f;
-  --line: #d6d2c7;
-  /* "Accent" is a step distinct from --ink (not a brand color) — with the
-     off-white's ample headroom this can be a genuinely separate gray step
-     again rather than relying mostly on non-color affordances. */
-  --accent: #333333;
-  --accent-strong: #000000;
-  /* Light sage-tinted neutral (not the old solid sage) — soft badge/callout
-     fill; kept for a whisper of brand color while staying far above the
-     ~0.20 luminance floor --ink/--accent-strong text need for 4.5:1 here. */
-  --accent-soft: #e8ece3;
+  /* "Slate and lime" (2026-09-27 — see docs/decisions.md; replaces the
+     green duotone entirely). User-supplied swatches: Background #14171C,
+     Secondary #3F4753, Accent #A3E635 (lime), Text/surface #ECEEF1. Those
+     four map onto this theme-pair system as: dark theme's surface-100 =
+     Background, surface-200 = Secondary, ink = Text/surface, accent =
+     Accent; light theme flips it (surface-100 = Text/surface, ink =
+     Background). surface-300 (both themes) and --line are derived steps,
+     not part of the original 4-swatch palette.
+     The one real complication: lime (#A3E635) has a very high relative
+     luminance (~0.646, close to white) — great contrast on dark surfaces
+     (~6–12:1 depending which), but only ~1.3:1 against the light theme's
+     off-white surface, far below AA. So --accent uses the literal supplied
+     lime only in the dark theme; the light theme gets a same-hue, darkened
+     variant (#4d6b12, ~83° hue match, independently verified 5.27:1
+     against this surface) rather than reusing the unreadable light swatch
+     as-is — this is a contrast necessity, not a stylistic choice. */
+  --surface-100: #eceef1;
+  --surface-200: #dfe2e6;
+  --surface-300: #d2d6dc;
+  --ink: #14171c;
+  --ink-soft: #383d47;
+  --ink-faint: #565c68;
+  --line: #d5d8dc;
+  --accent: #4d6b12;
+  --accent-strong: #1f2e08;
+  /* Pale lime tint — soft badge/callout fill, independently verified any
+     dark text placed on it (ink/accent-strong, both far under the ~0.20
+     luminance floor 4.5:1 needs here) passes with wide margin. */
+  --accent-soft: #e3f0c4;
   --good: #256b40;
-  /* Re-darkened from the sage-era value (#a8722a, only 3.83:1 against this
-     lighter off-white — would have failed WCAG AA) to #8a5a1f, verified
-     5.49:1. Not currently used as text anywhere in the app, but kept
-     compliant since it's a published design token. */
   --warn: #8a5a1f;
-  --bad: #b3402d;
+  /* Darker than a flat-background 4.5:1 minimum requires (L=0.1097 vs. a
+     0.1250 ceiling) because start-project-form.tsx's form-level error
+     banner renders this as text-bad on bg-bad/10 — a self-tinted
+     background lighter than plain surface-100, so the flat-background
+     value (#b3402d, L=0.1344) fell short there at 4.27:1. Verified both
+     cases: 4.93:1 on the tinted banner background, 5.66:1 on plain
+     surface-100 (input.tsx's inline field errors). */
+  --bad: #a63726;
 
   /* Fixed (non-theme-swapping) pair for "always dark" emphasis blocks —
      e.g. the Evolve framework stage, the hero's "Production" box, the
@@ -50,22 +53,15 @@
      page-theme surfaces. Using surface-100/ink for that purpose was a
      real bug caught in Checkpoint 7 browser testing — under system dark
      mode it inverted to a near-white panel with invisible text. */
-  --surface-inverse: #36443a;
+  --surface-inverse: #14171c;
   --ink-inverse: #ffffff;
-  /* A distinct light-gray step (not plain white) so accent-on-inverse
-     content still reads as "different from plain text" on the fixed-dark
-     surface — same job --accent does elsewhere, just tuned for AA contrast
-     against surface-inverse. Found failing live via axe-core (2026-09-26
-     production-readiness pass) at 4.09:1: the AiTransparency pills render
-     this same color as both the text AND a `bg-accent-inverse/10` tinted
-     fill, and that prior "~4.9:1" verification checked only against flat
-     --surface-inverse, not the actual ~10%-tinted pill background (which
-     is lighter than flat surface-inverse, since the tint itself is this
-     color blended in — self-referential, so darkening the token alone
-     doesn't simply help). Lightened to #c2c2c2 instead: 4.69:1 against the
-     real blended pill background (67,79,70), 5.77:1 against flat
-     surface-inverse for plain text/label usages — both re-verified. */
-  --accent-inverse: #c2c2c2;
+  /* Reuses dark theme's --ink-faint value (#b0b6bf) rather than a new hex
+     — same job --accent does elsewhere, tuned for AA against this fixed
+     surface. Verified 8.8:1 against flat --surface-inverse and 7.3:1
+     against the actual `bg-accent-inverse/10` self-tinted pill background
+     (the real, harder case — see the dark-theme block's comment below for
+     why the flat check alone isn't sufficient here). */
+  --accent-inverse: #b0b6bf;
 
   /* Filled surfaces (primary button, active filter chip, signature badge)
      that always carry readable "on-fill" text. Unlike the old brand-blue
@@ -103,94 +99,104 @@
   --space-24: 96px;
 }
 
-/* Green duotone dark theme (2026-09-22 — see docs/decisions.md, and the
-   :root comment above for the contrast-headroom tradeoff). "Black" →
-   rgb(54,68,58), user-supplied. --ink-soft/faint all independently
-   re-verified ≥4.5:1 against this background. --accent-fill/
-   --accent-fill-strong/--on-fill are deliberately NOT redefined here —
-   these rules target the same :root element as their var(--ink)/
-   var(--surface-100) declaration, so same-element cascade resolution
-   already picks up this block's --ink/--surface-100 correctly (unlike a
-   non-root scope — see the `[data-theme="light"]` block's comment below
-   for why that case differs and needs its own redeclaration).
-   --accent found failing live via axe-core (2026-09-26 production-readiness
-   pass): the original #b3b3b3 was only checked against --surface-100
-   (5.18:1) but SectionEyebrow renders it on `tone="raised"` sections too,
-   which use the lighter --surface-200 (#3c4b40) — only 4.4:1 there, below
-   AA. Lightened to #b8b8b8 (5.18:1 vs surface-100, 4.66:1 vs surface-200,
-   both re-verified). --ink-faint had the same class of bug, caught the
-   same pass after the About-page section-rhythm fix (same day) moved a
-   `text-ink-faint` label onto a `tone="raised"` section for the first
-   time — #b0b0b0 was only 4.26:1 against --surface-200. Lightened to
-   #bdbdbd (4.92:1 vs surface-200, re-verified), still darker than
-   --ink-soft so the soft/faint lightness order is preserved.
-   --accent-fill/--accent-fill-strong ARE redefined here, breaking from the
-   "same-element cascade, no redeclaration needed" note above — 2026-09-26,
-   user asked for filled buttons/panels on the dark-green side (nav's
-   "Start a Project," the mobile-nav popup, every dark-themed final CTA) to
-   use the site's actual off-white token rather than pure #ffffff, which is
-   what `--accent-fill: var(--ink)` was resolving to here since dark
-   theme's --ink is white. Hardcoded to the same #f7f7f4 used as the light
-   theme's --surface-100, so "off-white" means one exact color everywhere
-   on the site, not a per-theme derived value. --on-fill is untouched
-   (still var(--surface-100), i.e. this theme's dark green) since dark
-   text on an off-white fill was already correct and didn't need to change
-   — verified 9.57:1. */
+/* Slate and lime dark theme (2026-09-27 — see docs/decisions.md, and the
+   :root comment above for how the 4 supplied swatches map onto the
+   theme-pair system, and why --accent differs by theme). surface-100 =
+   Background (#14171C), surface-200 = Secondary (#3F4753), surface-300 is
+   a derived, darker-still step for ghost/placeholder fills — same
+   lightness ordering (300 < 100 < 200) the previous scheme used. ink =
+   Text/surface (#ECEEF1). ink-soft/ink-faint, --line, and good/warn/bad
+   are all newly derived for this palette and independently verified
+   against --surface-200 specifically (not just surface-100), since that's
+   the lighter/harder of the two real surfaces text renders on
+   (SectionEyebrow and text-ink-faint both render on `tone="raised"`
+   sections, which use surface-200 — a real bug class this session already
+   hit twice with the previous palette, so checked proactively here):
+   ink-soft #b8bcc4 (4.93:1), ink-faint #b0b6bf (4.60:1, still lighter than
+   ink-soft so the soft/faint order holds), good #4ade80 (5.39:1), warn
+   #fbbf24 (5.63:1), bad #fca5a5 (4.95:1). --accent uses the literal
+   supplied lime #A3E635 here (6.2:1 vs surface-200, 11.9:1 vs surface-100
+   — this theme has the luminance headroom the light theme's off-white
+   doesn't); --accent-strong is a lighter/more-saturated lime for hover
+   pop. --accent-fill/--accent-fill-strong stay pinned to the site's
+   off-white-equivalent (#ECEEF1, one shade down #DADDE2 for hover) per the
+   2026-09-26 decision that filled buttons/popups on the dark side should
+   read as off-white text/surface, not the accent color itself — carried
+   forward from the green-duotone version of this same rule, just with the
+   new hex. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --surface-100: #36443a;
-    --surface-200: #3c4b40;
-    --surface-300: #2e3a32;
-    --ink: #ffffff;
-    --ink-soft: #c2c2c2;
-    --ink-faint: #bdbdbd;
-    --line: #4a5d4f;
-    --accent: #b8b8b8;
-    --accent-strong: #ffffff;
-    --accent-soft: #2a362e;
-    --good: #5fbe85;
-    --warn: #d3a34c;
-    --bad: #e0836b;
-    --accent-fill: #f7f7f4;
-    --accent-fill-strong: #f0eee7;
+    --surface-100: #14171c;
+    --surface-200: #3f4753;
+    --surface-300: #0e1013;
+    --ink: #eceef1;
+    --ink-soft: #b8bcc4;
+    --ink-faint: #b0b6bf;
+    --line: #333844;
+    --accent: #a3e635;
+    --accent-strong: #c3f26b;
+    --accent-soft: #232b16;
+    --good: #4ade80;
+    --warn: #fbbf24;
+    --bad: #fca5a5;
+    --accent-fill: #eceef1;
+    --accent-fill-strong: #dadde2;
     --logo-filter: invert(1);
   }
 }
 
 :root[data-theme="dark"] {
-  --surface-100: #36443a;
-  --surface-200: #3c4b40;
-  --surface-300: #2e3a32;
-  --ink: #ffffff;
-  --ink-soft: #c2c2c2;
-  --ink-faint: #bdbdbd;
-  --line: #4a5d4f;
-  --accent: #b8b8b8;
-  --accent-strong: #ffffff;
-  --accent-soft: #2a362e;
-  --good: #5fbe85;
-  --warn: #d3a34c;
-  --bad: #e0836b;
-  --accent-fill: #f7f7f4;
-  --accent-fill-strong: #f0eee7;
+  --surface-100: #14171c;
+  --surface-200: #3f4753;
+  --surface-300: #0e1013;
+  --ink: #eceef1;
+  --ink-soft: #b8bcc4;
+  --ink-faint: #b0b6bf;
+  --line: #333844;
+  --accent: #a3e635;
+  --accent-strong: #c3f26b;
+  --accent-soft: #232b16;
+  --good: #4ade80;
+  --warn: #fbbf24;
+  --bad: #fca5a5;
+  --accent-fill: #eceef1;
+  --accent-fill-strong: #dadde2;
   --logo-filter: invert(1);
 }
 
 /* Non-root theme scope — lets a subtree opt into the light palette while
    the rest of the (dark-forced) page isn't. Used by the homepage hero
-   panel only (see docs/decisions.md); `:root[data-theme="light"]` above
-   only ever matches the <html> element itself, so it can't cover this. */
+   panel, and by the whole `/work/[slug]`, `/services/[slug]` "problems"
+   section, and `/start-a-project` templates (see docs/decisions.md);
+   `:root[data-theme="light"]` above only ever matches the <html> element
+   itself, so it can't cover any of those.
+   --good/--warn/--bad are new here (2026-09-27) — a real, previously
+   undetected bug: custom properties inherit normally down the DOM tree,
+   so a subtree that never redeclares a token inherits whatever <html>'s
+   dark-theme rule resolved it to, not a value re-resolved for this scope.
+   Found live via axe-core on `/start-a-project`'s triggered validation-
+   error state: the light-themed error text was rendering dark theme's
+   --bad (#fca5a5, a pale red sized for a dark background) at 1.63:1
+   against this scope's light surface — invisible in the old palette only
+   by coincidence, since the old dark-theme --bad happened to be dark
+   enough to still clear 4.5:1 even where it didn't belong. Added the same
+   good/warn/bad values the base :root block already uses and had already
+   independently verified for this exact surface (5.54:1 / 5.07:1 /
+   4.90:1) — re-verified 0 violations after. */
 [data-theme="light"] {
-  --surface-100: #f7f7f4;
-  --surface-200: #f0eee7;
-  --surface-300: #e8e5dc;
-  --ink: #101010;
-  --ink-soft: #4d4d4d;
-  --ink-faint: #5f5f5f;
-  --line: #d6d2c7;
-  --accent: #333333;
-  --accent-strong: #000000;
-  --accent-soft: #e8ece3;
+  --surface-100: #eceef1;
+  --surface-200: #dfe2e6;
+  --surface-300: #d2d6dc;
+  --ink: #14171c;
+  --ink-soft: #383d47;
+  --ink-faint: #565c68;
+  --line: #d5d8dc;
+  --accent: #4d6b12;
+  --accent-strong: #1f2e08;
+  --accent-soft: #e3f0c4;
+  --good: #256b40;
+  --warn: #8a5a1f;
+  --bad: #a63726;
   --logo-filter: none;
   /* --accent-fill/-strong/--on-fill are declared in :root as var(--ink)-style
      references specifically so they auto-invert with the theme (see :root's
