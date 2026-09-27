@@ -331,6 +331,45 @@ export const PROJECTS: Project[] = [
     permissionLevel: "public",
   },
   {
+    title: "Sybrisco",
+    slug: "sybrisco",
+    category: "AI Web Development",
+    summary:
+      "A fully bilingual (Arabic/English) corporate site for a Saudi IT and digital-transformation consultancy, built to read as a credible enterprise partner for Vision 2030 work, with a real Arabic-first experience rather than a translated afterthought.",
+    client: "SYBRISCO KSA",
+    content: {
+      problem:
+        "SYBRISCO sells enterprise IT, cybersecurity, cloud, and digital-transformation services into the Saudi market, where credibility depends on reading as a genuine Arabic-language, Vision 2030–aligned partner, not an English site with a translate button bolted on. The site had to carry real trust signals (certifications, compliance posture, named leadership) and convert a visitor straight into a qualified consultation request.",
+      startingPoint: "Built from scratch as a bilingual corporate site; no earlier version is visible from the deployed product.",
+      solution:
+        "A single-page site, hero, stats, about (vision/mission/goal), seven services, a \"why us\" trust section, a four-step engagement approach, nine target sectors, and a contact section with a real working form, that loads in Arabic by default and switches to English (or back) instantly via a nav toggle. The switch isn't a text swap: it flips the entire layout direction, right-to-left for Arabic and left-to-right for English, mirroring the nav, logo lockup, stat blocks, and every section's alignment, and swaps typefaces per script (IBM Plex Sans Arabic for Arabic copy, Sora/Manrope for Latin) rather than rendering Arabic in a Latin font pretending to support it.",
+      architecture: [
+        "React (Vite) single-page app, static-deployed on Vercel",
+        "i18n layer driving both copy and document text-direction (RTL ↔ LTR)",
+        "Per-script web fonts: IBM Plex Sans Arabic (AR), Sora / Manrope (EN)",
+        "Animated stat counters (founded year, service-area count, quality/vision figures)",
+        "Client-side contact form (name, email, company, message)",
+      ],
+      engineeringContribution:
+        "The real engineering is in the localization, not just the copy. Switching languages re-renders the whole document direction, so RTL Arabic and LTR English aren't two skins on the same fixed layout: nav order, the logo lockup, icon placement, and every card and stat block mirror correctly rather than just having their text replaced in place. Loading a matched Arabic web font (IBM Plex Sans Arabic) instead of leaning on the Latin body font's fallback glyphs is a deliberate, easy-to-skip detail that this site gets right. Content is organized into clearly scoped sections (About, Services, Why Us, Approach, Sectors, Contact) that hold up in both directions and at both text lengths, since Arabic and English strings for the same sentence are rarely the same width.",
+      aiContribution: null,
+      results:
+        "A complete bilingual corporate site, hero, stats, about, seven services, a trust/credentials section, a four-step approach, nine target sectors, and a working contact form, with full RTL/LTR mirroring verified live in both directions, not just spot-checked copy.",
+    },
+    technology: ["React", "Vite", "Google Fonts (IBM Plex Sans Arabic, Sora, Manrope)", "Vercel"],
+    images: [
+      "/case-studies/sybrisco/home-arabic.jpg",
+      "/case-studies/sybrisco/services-arabic.jpg",
+      "/case-studies/sybrisco/services-english.jpg",
+      "/case-studies/sybrisco/contact-english.jpg",
+    ],
+    videos: [],
+    testimonial: null,
+    liveUrl: "https://sybrisco.vercel.app",
+    featured: false,
+    permissionLevel: "public",
+  },
+  {
     title: "OPD Reimbursement Workflow",
     slug: "opd-reimbursement-workflow",
     category: "AI Automation",
